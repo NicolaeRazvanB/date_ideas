@@ -25,7 +25,7 @@ button {
   color: #333;
 }
 
-@media (max-width: 600px) {
+/* @media (max-width: 600px) {
   .container {
     width: 90%;
   
@@ -39,4 +39,4 @@ button {
   .roulette-result {
     font-size: 16px;
   }
-}
+} */
