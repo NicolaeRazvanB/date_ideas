@@ -20,7 +20,7 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firestore
 const db = getFirestore(app);
 const options = {
-  size: 400,
+  size: 300,
   maxSpeed: 100,
   rotationDirection: "clockwise",
   acceleration: 1,
@@ -37,10 +37,10 @@ const options = {
       size: 16,
     },
     label: {
-      font: "12px Arial",
+      font: "9px Arial",
       align: "right",
       baseline: "middle",
-      offset: 0.8,
+      offset: 0.9,
       defaultColor: "#000",
     },
     pie: {
