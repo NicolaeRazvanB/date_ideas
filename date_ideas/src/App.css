@@ -1,0 +1,42 @@
+/* App.css */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh; */
+  margin: 0;
+  background: rgb(0, 255, 94);
+}
+
+h1{color: cornflowerblue;}
+.container {
+  text-align: center;
+  padding: 20px;
+}
+
+button {
+  margin: 3px;
+
+}
+
+.roulette-result {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #333;
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: 90%;
+  
+  }
+
+  button {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .roulette-result {
+    font-size: 16px;
+  }
+}
