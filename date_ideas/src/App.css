@@ -8,7 +8,8 @@ body {
   background: rgb(0, 255, 94);
 }
 
-h1{color: cornflowerblue;}
+h3{color: cornflowerblue;
+margin-top: -300px;}
 .container {
   text-align: center;
   padding: 20px;
@@ -16,7 +17,8 @@ h1{color: cornflowerblue;}
 
 button {
   margin: 3px;
-
+  background: cornflowerblue;
+  color:cornflowerblue;
 }
 
 .roulette-result {

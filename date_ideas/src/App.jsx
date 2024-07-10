@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Roulette, useRoulette } from "react-hook-roulette";
 import "./App.css";
-// firebase.js
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 
@@ -16,9 +15,8 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Initialize Firestore
 const db = getFirestore(app);
+
 const options = {
   size: 300,
   maxSpeed: 100,
@@ -69,10 +67,11 @@ const options = {
 
 function App() {
   const [items, setItems] = useState([]);
-  const [currentResult, setCurrentResult] = useState(null); // State to track the current result
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [currentResult, setCurrentResult] = useState(null);
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
-    // Function to fetch data from Firestore
     const fetchData = async () => {
       try {
         const ideasCollection = collection(db, "ideas");
@@ -80,6 +79,7 @@ function App() {
         const ideasData = ideasSnapshot.docs.map((doc) => ({
           name: doc.data().activity,
           type: doc.data().type,
+          location: doc.data().location,
         }));
         setItems(ideasData);
       } catch (error) {
@@ -88,29 +88,47 @@ function App() {
     };
 
     fetchData();
-  }, []); // Empty dependency array means this useEffect runs once when the component mounts
+  }, []);
 
-  const { roulette, onStart, onStop, result } = useRoulette({ items, options });
+  useEffect(() => {
+    if (filter === "all") {
+      setFilteredItems(items);
+    } else {
+      setFilteredItems(items.filter((item) => item.location === filter));
+    }
+  }, [items, filter]);
+
+  const { roulette, onStart, onStop, result } = useRoulette({
+    items: filteredItems,
+    options,
+  });
 
   useEffect(() => {
     if (result) {
-      console.log("Roulette result:", result); // Log the result to see its structure
+      console.log("Roulette result:", result);
       setCurrentResult(result);
     }
   }, [result]);
 
   return (
     <div className="container">
-      <h1>Welcome to date ideas roulette</h1>
+      <h3>Welcome to date ideas roulette</h3>
       <Roulette roulette={roulette} />
       <br />
       {currentResult && <p className="roulette-result"> {currentResult}</p>}
-      <button type="button" onClick={onStart} disabled={items.length === 0}>
-        Start
-      </button>
-      <button type="button" onClick={onStop} disabled={items.length === 0}>
-        Stop
-      </button>
+      <div className="controls">
+        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+          <option value="all">All</option>
+          <option value="indoor">Indoor</option>
+          <option value="outdoor">Outdoor</option>
+        </select>
+        <button onClick={onStart} disabled={filteredItems.length === 0}>
+          Start
+        </button>
+        <button onClick={onStop} disabled={filteredItems.length === 0}>
+          Stop
+        </button>
+      </div>
     </div>
   );
 }
