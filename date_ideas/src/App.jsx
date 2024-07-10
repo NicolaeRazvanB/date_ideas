@@ -32,7 +32,7 @@ const options = {
     },
     arrow: {
       bg: "#000",
-      size: 16,
+      size: 7,
     },
     label: {
       font: "9px Arial",
@@ -94,11 +94,11 @@ function App() {
     if (filter === "all") {
       setFilteredItems(items);
     } else {
-      setFilteredItems(items.filter((item) => item.location === filter));
+      setFilteredItems(items.filter((item) => item.type === filter));
     }
   }, [items, filter]);
 
-  const { roulette, onStart, onStop, result } = useRoulette({
+  let { roulette, onStart, onStop, result } = useRoulette({
     items: filteredItems,
     options,
   });
