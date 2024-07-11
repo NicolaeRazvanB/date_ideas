@@ -80,10 +80,20 @@ function App() {
           name: doc.data().activity,
           type: doc.data().type,
           location: doc.data().location,
+          category: "date",
         }));
-        setItems(ideasData);
+
+        const boardgamesCollection = collection(db, "boardgames");
+        const boardgamesSnapshot = await getDocs(boardgamesCollection);
+        const boardgamesData = boardgamesSnapshot.docs.map((doc) => ({
+          name: doc.data().name,
+          type: doc.data().type,
+          category: "boardgame",
+        }));
+
+        setItems([...ideasData, ...boardgamesData]);
       } catch (error) {
-        console.error("Error fetching ideas: ", error);
+        console.error("Error fetching data: ", error);
       }
     };
 
@@ -92,9 +102,19 @@ function App() {
 
   useEffect(() => {
     if (filter === "all") {
-      setFilteredItems(items);
+      setFilteredItems(items.filter((item) => item.category === "date"));
+    } else if (filter === "allBoardgames") {
+      setFilteredItems(items.filter((item) => item.category === "boardgame"));
+    } else if (filter === "competitive" || filter === "coop") {
+      setFilteredItems(
+        items.filter(
+          (item) => item.type === filter && item.category === "boardgame"
+        )
+      );
     } else {
-      setFilteredItems(items.filter((item) => item.type === filter));
+      setFilteredItems(
+        items.filter((item) => item.type === filter && item.category === "date")
+      );
     }
   }, [items, filter]);
 
@@ -112,15 +132,20 @@ function App() {
 
   return (
     <div className="container">
-      <h3>Welcome to date ideas roulette</h3>
+      <h3>Welcome to date ideas and boardgames roulette</h3>
       <Roulette roulette={roulette} />
       <br />
-      {currentResult && <p className="roulette-result"> {currentResult}</p>}
+      {currentResult && (
+        <p className="roulette-result"> {currentResult.name}</p>
+      )}
       <div className="controls">
         <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-          <option value="all">All</option>
-          <option value="indoor">Indoor</option>
-          <option value="outdoor">Outdoor</option>
+          <option value="all">All Date Ideas</option>
+          <option value="indoor">Indoor Date Ideas</option>
+          <option value="outdoor">Outdoor Date Ideas</option>
+          <option value="allBoardgames">All Boardgames</option>
+          <option value="competitive">Competitive Boardgames</option>
+          <option value="coop">Cooperative Boardgames</option>
         </select>
         <button onClick={onStart} disabled={filteredItems.length === 0}>
           Start
