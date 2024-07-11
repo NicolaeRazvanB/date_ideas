@@ -135,9 +135,7 @@ function App() {
       <h3>Welcome to date ideas and boardgames roulette</h3>
       <Roulette roulette={roulette} />
       <br />
-      {currentResult && (
-        <p className="roulette-result"> {currentResult.name}</p>
-      )}
+      {currentResult && <p className="roulette-result"> {currentResult}</p>}
       <div className="controls">
         <select value={filter} onChange={(e) => setFilter(e.target.value)}>
           <option value="all">All Date Ideas</option>
